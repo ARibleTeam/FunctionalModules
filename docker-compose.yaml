@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
 
   fastapi:
-    build: ./Fastapi
+    build: ./FastAPI
     ports:
       - "8001:8001"
     volumes:
