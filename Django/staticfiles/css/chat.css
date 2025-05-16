@@ -1,0 +1,168 @@
+.chat-box {
+    position: relative; /* Меняем absolute на relative */
+    top: auto; /* Убираем смещение */
+    left: auto;
+    transform: none; /* Убираем трансформацию */
+    border-radius: 10px;
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 0; /* Важно для flex-контейнера */
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Размещаем элементы по вертикали */
+    align-items: stretch; /* Растягиваем элементы по ширине */
+    width: 100%;
+    max-width: 100%; /* Ограничиваем максимальную ширину */
+    margin-bottom: 20px;
+    border: 1px solid #ddd; /* Рамка вокруг контейнера */
+    border-radius: 20px; /* Скругленные углы */
+    box-sizing: border-box; /* Учитываем отступы и границы внутри ширины контейнера */
+}
+
+.chat-input {
+    width: 100%;
+    line-height: 1.5em;
+    resize: none;
+    overflow-y: auto;
+    height: 80px;
+    border: none; /* Убираем обводку */
+    padding: 10px 40px; /* Отступы внутри поля */
+    border-radius: 20px; /* Скругляем углы */
+    box-sizing: border-box; /* Учитываем отступы и границы внутри ширины */
+}
+
+
+.input-buttons {
+    display: flex;
+    justify-content: space-between; /* Размещаем кнопки с отступами */
+    max-width: 100%; /* Ограничиваем максимальную ширину */
+    padding: 5px 10px; /* Добавляем отступы */
+}
+
+.send-btn{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Скрываем стандартный input[type="file"] */
+.hidden-input {
+    display: none; /* Полностью скрываем input */
+}
+
+
+.input-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+
+.file-only-mode {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.center-only {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.attach-text {
+    margin-top: 5px;
+    color: #888;
+    font-size: 14px;
+}
+
+
+.chat-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.chat-image:hover {
+    transform: scale(1.05);
+}
+
+.attach-btn {
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px;
+}
+
+.attach-icon {
+    width: 28px;
+    height: 28px;
+}
+
+
+.icon {
+    width: 28px;
+    height: 28px;
+}
+
+.send-btn:hover, .attach-btn:hover {
+    opacity: 0.8;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.messages-container {
+    flex: 1;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow-y: hidden; /* скролл будет появляться при переполнении */
+}
+
+.message {
+    max-width: 70%; /* Ограничиваем ширину сообщений */
+    margin-bottom: 10px; /* Отступ между сообщениями */
+    padding: 10px 15px;
+    background-color: #e0e0e0; /* Серый фон */
+    border-radius: 20px; /* Закругленные углы */
+    color: #333; /* Цвет текста */
+    align-self: flex-end; /* Сообщение пользователя на правой стороне */
+    opacity: 0;
+    white-space: normal; /* Текст будет переноситься */
+    word-wrap: break-word; /* Перенос слов */
+    animation: slideUp 0.5s forwards; /* Анимация для появления */
+    text-align: left; /* Выравнивание текста по левой стороне */
+}
+
+.incoming, .waiting {
+    align-self: flex-start; /* Сообщение пользователя на правой стороне */
+}
+
+/* Анимация для плавного появления сообщения */
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
