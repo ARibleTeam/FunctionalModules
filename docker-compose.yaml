@@ -1,0 +1,40 @@
+services:
+  django:
+    build: ./Django
+    expose:
+      - "8000"
+    volumes:
+      - ./modules:/modules
+      - ./files:/files
+      - static_volume:/app/staticfiles
+    restart: unless-stopped
+
+  fastapi:
+    build: ./Fastapi
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./modules:/modules
+      - ./files:/files
+    restart: unless-stopped
+
+  file_cleaner:
+    build: ./cleaner_service
+    volumes:
+      - ./files:/files
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/staticfiles
+    depends_on:
+      - django
+
+volumes:
+  modules:
+  files:
+  static_volume:
