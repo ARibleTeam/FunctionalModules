@@ -1,0 +1,47 @@
+{% load static %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token }}">
+<meta name="app_name" content="{{ active_app.name }}">
+<meta name="app_type" content="{{ active_app.type }}">
+<meta name="app_slug" content="{{ active_app.slug }}">
+<meta name="app_hello_message" content="{{ active_app.hello_message }}">
+
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% if not history.messages %}
+    <!-- <span id="chatTitle">Чат с приложением: {{ active_app.name }}</span> -->
+{% endif %}
+<div class="chat-box">
+    <div class="messages-container" id="messagesContainer">
+        <!-- Сообщения будут отображаться здесь -->
+    </div>
+
+    <div class="input-container">
+        {% if active_app.type == 'text2file' or active_app.type == 'text2text' %}
+            <textarea id="chatMessageInput" name="chat_message" class="chat-input" placeholder="Введите сообщение..."></textarea>
+            <div class="input-buttons">
+                <button class="send-btn" title="Отправить сообщение" id="sendBtn">
+                    <img src="{% static 'img/send.png' %}" alt="Отправить" class="icon">
+                </button>
+            </div>
+        {% else %}
+            <div class="file-only-mode">
+                <input type="file" id="fileInput" class="hidden-input" />
+                <label for="fileInput" class="attach-btn">
+                    <img src="{% static 'img/paperclip-icon.png' %}" alt="Прикрепить файл" class="attach-icon" />
+                </label>
+                <p id="fileName">Прикрепите файл</p>
+                <button class="send-btn" title="Отправить сообщение" id="sendBtn">
+                    <img src="{% static 'img/send.png' %}" alt="Отправить" class="icon">
+                </button>
+            </div>
+        {% endif %}
+    </div>
+    
+    
+</div>
+
+<script src="{% static 'js/chat.js' %}"></script>
+
+<script>
+    const loadingGifPath = "{% static 'img/loading-gif-loading.gif' %}";
+</script>
