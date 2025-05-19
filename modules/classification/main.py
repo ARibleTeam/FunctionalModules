@@ -9,7 +9,7 @@ logging.disable(logging.CRITICAL)  # Отключаем логи
 # Загрузка модели
 model = YOLO("yolo11n-cls.pt")
 
-print("Прикрепите изображение для работы", flush=True)
+print("Прикрепите и отправьте изображение для работы", flush=True)
 # Получаем путь к файлу
 file_path = input()
 
