@@ -13,13 +13,13 @@
         <aside id="sidebar">
 
             {% if request.user.is_authenticated %}
-                <a href="{% url 'logout' %}" title="Выйти" style="padding: 0px;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3580/3580168.png" class="log-btn" id="profileBtn" alt="Выйти">
-                </a>
+                <div class="auth-button-container">
+                    <a class="auth-button" href="{% url 'logout' %}">Выйти</a>
+                </div>
             {% else %}
-                <a href="{% url 'login' %}" title="Войти" style="padding: 0px;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/992/992680.png" class="log-btn" id="profileBtn" alt="Войти">
-                </a>
+                <div class="auth-button-container">
+                    <a class="auth-button" href="{% url 'login' %}">Войти</a>
+                </div>
             {% endif %}
 
             <h2>Приложения</h2>

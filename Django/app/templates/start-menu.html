@@ -8,15 +8,18 @@
     <title>{% block title %}Чат-приложение{% endblock %}</title>
 </head>
 <body>
-    {% if request.user.is_authenticated %}
-        <p>Привет, {{ request.user.username }}!</p>
-        <a href="{% url 'logout' %}">Выйти</a>
-    {% else %}
-        <a href="{% url 'login' %}">Войти</a>
-    {% endif %}
-
     <div class="main-container">
-        <div class="pulsing-text">Выберите приложение для работы</div>
+        {% if request.user.is_authenticated %}
+            <div class="auth-button-container">
+                <a class="auth-button" href="{% url 'logout' %}">Выйти</a>
+            </div>
+        {% else %}
+            <div class="auth-button-container">
+                <a class="auth-button" href="{% url 'login' %}">Войти</a>
+            </div>
+        {% endif %}
+
+        <div class="main-text">Выберите модуль для работы</div>
 
         <div class="app-container">
             {% for app in apps %}
