@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('fileInput');
     const fileNameDisplay = document.getElementById('fileName');
 
+    let isError = false;
     let blockInput = true;
 
     const wsHost = window.location.hostname;
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 removeWaitingMessage();
                 blockInput = true;
                 addMessageToChat(data.output + " Перезагрузите страницу или выберите другой модуль!", 'incoming');
+                isError = true;
             }
             if (data.status == "received") {
                 removeWaitingMessage();
@@ -56,7 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
             addWaitingMessage();
             
             // Пытаемся переподключиться через 3 секунды
-            setTimeout(connectWebSocket, 3000);
+            if (isError == false) {
+                setTimeout(connectWebSocket, 3000);
+            }
         };
 
         socket.onerror = (error) => {
