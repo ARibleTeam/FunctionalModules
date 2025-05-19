@@ -171,7 +171,9 @@ main.blurred::before {
     .sidebar-wrapper {
         display: none;
     }
-    
+    .auth-button {
+        margin-top: 35px;
+    }
 }
 
 .pulsing-ball {
@@ -197,4 +199,21 @@ main.blurred::before {
     transform: scale(1.3);
     opacity: 1;
     }
+}
+
+.auth-button {
+    padding: 8px 22px;
+    font-size: 22px;
+    text-decoration: none;
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.auth-button:hover {
+    background-color: #f0f0f0;
 }

@@ -2,7 +2,7 @@ body {
     margin-top: 50px;
     margin-bottom: 50px;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: Inter, sans-serif;
     height: auto;
     background-color: #f3f3f3;
     display: flex;
@@ -13,13 +13,15 @@ body {
 
 .main-container {
     text-align: center;
-    min-height: 100vh;
+    width: 80%;
+    max-width: 1500px;
 }
 
-.pulsing-text {
-    font-size: 20px;
-    color: #333;
-    animation: pulse 2s infinite ease-in-out;
+.main-text {
+    font-size: clamp(30px, 2vw, 45px);
+    font-weight: 600;
+
+    color: #000;
     margin-bottom: 30px;
     margin-top: 30px;
 }
@@ -27,58 +29,60 @@ body {
 .app-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 0 10px;
-    margin: 0 auto; /* Центрирование контейнера */
+    gap: 25px;
 }
 
-@media (max-width: 768px) { /* Для мобильных */
+
+@media (max-width: 1200px) { /* Для мобильных */
     .app-container {
         grid-template-columns: 1fr; /* Одна колонка */
         justify-items: center; /* Центрирование элементов внутри */
         max-width: 100%; /* Чтобы занимало всю ширину */
     }
+    .app-box {
+        width: 85%;
+    }
 }
 
 .app-box {
-    width: 300px;
-    height: 300px;
+    padding: 32px;
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #000;
+    border-radius: 12px;
+    box-shadow: none;
     display: flex;
-    flex-direction: column; /* Размещаем элементы вертикально */
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    text-align: left;
     cursor: pointer;
-    text-align: center;
-    color: #333;
-    font-size: 14px; /* уменьшенный размер шрифта для лучшего отображения */
-    font-weight: bold;
-    transition: transform 0.3s ease;
+    color: #000;
+    font-size: 17px;
+    font-weight: normal;
+    transition: transform 0.2s ease;
 }
 
 .app-title {
-    font-size: 30px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 10px;
+    font-size: clamp(26px, 2vw, 30px);
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: #000;
 }
 
 .app-description {
-    font-size: 15px;
-    color: #7f8c8d;
- /* Запрещает переносу текста на новую строку */
-    overflow: hidden; /* Прячет лишний текст, который не помещается */
-    text-overflow: ellipsis; /* Добавляет многоточие (...) в конце строки */
-    max-width: 100%; /* Ограничивает максимальную ширину */
-    display: block; /* Убедитесь, что это блочный элемент */
+    font-size: clamp(20px, 2vw, 25px);
+    font-weight: normal;
+    color: #333;
+    line-height: 1.4;
+    text-align: left;
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
 }
 
 
 .app-box:hover {
     transform: scale(1.05);
-    background-color: #e6e6e6;
 }
 
 @keyframes pulse {
@@ -88,4 +92,26 @@ body {
     50% {
         opacity: 1;
     }
+}
+
+.auth-button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+}
+
+.auth-button {
+    padding: 8px 22px;
+    font-size: 22px;
+    text-decoration: none;
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.auth-button:hover {
+    background-color: #f0f0f0;
 }

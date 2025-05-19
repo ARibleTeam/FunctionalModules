@@ -11,49 +11,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('fileInput');
     const fileNameDisplay = document.getElementById('fileName');
 
-    let blockInput = false;
+    let blockInput = true;
 
-    const wsHost = window.location.hostname; // Берёт домен сайта
-    const socket = new WebSocket(`ws://${wsHost}:8001/ws/messages`);
+    const wsHost = window.location.hostname;
+    let socket; // Используем let вместо const, чтобы можно было переприсваивать
 
-    socket.onopen = () => {
-        addMessageToChat(app_hello_message, 'incoming');
-        console.log("Connected to WebSocket server on port 8001");
+    // Функция для создания и настройки WebSocket соединения
+    function connectWebSocket() {
+        socket = new WebSocket(`ws://${wsHost}:8001/ws/messages`);
 
-        // Отправка сообщения после установки соединения
-        const message = {
-            app_slug: app_slug,
+        socket.onopen = () => {
+            removeWaitingMessage();
+
+            // Отправка сообщения после установки соединения
+            const message = {
+                app_slug: app_slug,
+            };
+            socket.send(JSON.stringify(message));
+
+            addWaitingMessage();
         };
-        socket.send(JSON.stringify(message));
 
-        addWaitingMessage();
-    };
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.status == "error") {
+                removeWaitingMessage();
+                blockInput = true;
+                addMessageToChat(data.output + " Перезагрузите страницу или выберите другой модуль!", 'incoming');
+            }
+            if (data.status == "received") {
+                removeWaitingMessage();
+                addMessageToChat(data.output, 'incoming');
+                blockInput = false;
+            }
+            if (data.status == "file") {
+                removeWaitingMessage();
+                addFileToChat(data.file_name, 'incoming');
+                blockInput = true;
+            }
+        };
 
-    socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        // console.log("Message from server:", data);
-        if (data.status == "error") {
-            removeWaitingMessage();
+        socket.onclose = (event) => {
             blockInput = true;
-            addMessageToChat(data.output, 'incoming');
-            setTimeout(addMessageToChat("Перезагрузите страницу или выберите другой модуль!", 'incoming'), 400);
-        }
-        if (data.status == "received") {
-            removeWaitingMessage();
-            addMessageToChat(data.output, 'incoming');
-            blockInput = false;
-        }
-        if (data.status == "file") {
-            removeWaitingMessage();
-            addFileToChat(data.file_name, 'incoming');
-            blockInput = true;
-        }
-    };
+            addWaitingMessage();
+            
+            // Пытаемся переподключиться через 3 секунды
+            setTimeout(connectWebSocket, 3000);
+        };
 
-    socket.onclose = () => {
-        console.log("Disconnected from WebSocket server");
-    };
-
+        socket.onerror = (error) => {
+            socket.close(); // Это вызовет onclose, где уже есть логика переподключения
+        };
+    }
 
     function sendSocketMessage(messageText) {
         if (socket.readyState === WebSocket.OPEN) {
@@ -63,8 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             socket.send(JSON.stringify(message));
             blockInput = true;
-        } else {
-            console.error("WebSocket is not connected.");
         }
     }
 
@@ -76,9 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    addMessageToChat(app_hello_message, 'incoming');
+    // Инициализируем первое соединение
+    connectWebSocket();
     // Вызываем сразу и с небольшой задержкой для надёжности
     scrollPageToBottom();
     setTimeout(scrollPageToBottom, 100);
+
     
     if (fileInput) {
         fileInput.addEventListener('change', function () {
@@ -103,21 +114,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (chatTitle) {
                 chatTitle.remove(); // Удаляем элемент <h2>
             }
-
-            if (document.getElementById('waitingMessage')) { // если предыдущее сообщение не обработано, не отправляем новое
-                return
-            }
             
             // Затем начинаем отправку
             sendMessageWithFile(fileInput, app_name, csrfToken)
             .then(data => {
                 if (data.success) {
+                    blockInput = true;
+                    
                     fileInput.value = ''; // убираем выбранный файл
                     fileNameDisplay.textContent = 'Прикрепите файл';
 
                     // Добавляем исходящий файл в чат
                     addFileToChat(data.response, 'outgoing');
-                    console.log('Исходящий файл:', data.response);
         
                     // Показываем "ожидание" (например, спиннер)
                     addWaitingMessage();
@@ -148,6 +156,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (message == "") {
             return
         }
+
+        blockInput = true;
+
         // Обработка обычных текстовых сообщений
         addMessageToChat(message, 'outgoing');
         chatMessageInput.value = '';
@@ -219,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функция для добавления сообщения "Ожидание ответа"
     function addWaitingMessage() {
+        blockInput = true;
         const waitingMessageDiv = document.createElement('div');
         waitingMessageDiv.id = 'waitingMessage';
     
@@ -261,11 +273,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             return data; // Возвращаем результат
         })
         .catch(error => {
-            console.error('Ошибка:', error);
             throw new Error('Ошибка отправки сообщения');
         });
     }
