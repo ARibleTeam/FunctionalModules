@@ -55,10 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         socket.onclose = (event) => {
             blockInput = true;
-            addWaitingMessage();
             
             // Пытаемся переподключиться через 3 секунды
             if (isError == false) {
+                addWaitingMessage();
                 setTimeout(connectWebSocket, 3000);
             }
         };
