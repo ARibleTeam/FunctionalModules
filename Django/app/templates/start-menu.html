@@ -18,6 +18,12 @@
                 <a class="auth-button" href="{% url 'login' %}">Войти</a>
             </div>
         {% endif %}
+        
+        {% if not request.user.is_authenticated %}
+            <div class="login-hint">
+                Войдите в систему, чтобы получить доступ к дополнительным модулям
+            </div>
+        {% endif %}
 
         <div class="main-text">Выберите модуль для работы</div>
 
