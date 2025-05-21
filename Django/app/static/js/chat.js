@@ -118,12 +118,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (chatTitle) {
                 chatTitle.remove(); // Удаляем элемент <h2>
             }
+
+            blockInput = true;
             
             // Затем начинаем отправку
             sendMessageWithFile(fileInput, app_name, csrfToken)
             .then(data => {
                 if (data.success) {
-                    blockInput = true;
                     
                     fileInput.value = ''; // убираем выбранный файл
                     fileNameDisplay.textContent = 'Прикрепите файл';
