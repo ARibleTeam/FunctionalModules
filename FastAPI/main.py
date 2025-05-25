@@ -94,8 +94,8 @@ async def message_websocket(websocket: WebSocket):
 
                     while True:
                         try:
-                            # Ожидаем ввод не более 10 секунд
-                            async with asyncio.timeout(10):
+                            # Ожидаем ввод не более 30 секунд
+                            async with asyncio.timeout(30):
                                 user_data = await websocket.receive_json()       
                         except asyncio.TimeoutError:
                             await websocket.send_json({"status": "error", "output": "Превышено время ожидания!"})
